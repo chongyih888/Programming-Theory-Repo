@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     // common properties for all enemies
     private int health;
     private int attackPower;
+    private float speed;
 
     public int Health
     {
@@ -34,16 +35,33 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public float Speed
+    {
+        get { return speed; }
+        set
+        {
+            // Damage must be a non-negative value
+            if (value < 0)
+                speed = 0;
+            else
+                speed = value;
+        }
+    }
+    
     // Start is called before the first frame update
     void Start()
     {
-        
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
+       
+
+
     }
 
     // ABSTRACTION
@@ -72,5 +90,18 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject); // Remove the enemy from the scene
     }
 
-    
+    // ABSTRACTION
+    // Method to handle movement
+    public void EnemyMovement()
+    {
+        // Move enemy
+        transform.Translate(-Vector3.forward * Time.deltaTime * speed);
+
+        if (transform.position.y < -10)
+        {
+            Die();
+        }
+    }
+
+
 }

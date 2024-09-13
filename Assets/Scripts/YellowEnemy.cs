@@ -5,18 +5,24 @@ using UnityEngine;
 // INHERITANCE
 public class YellowEnemy : Enemy
 {
+    private float topBound = 30.0f;
+    private float lowerBound = -10f;
+
     // Start is called before the first frame update
     void Start()
     {
         // INHERITANCE
         Health = 10;
         AttackPower = 2;
+        Speed = 5;
+           
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        EnemyMovement();
+        DestroyOutOfBound();
     }
 
     // POLYMORPHISM
@@ -24,4 +30,34 @@ public class YellowEnemy : Enemy
     {
         player.TakeDamage(AttackPower * 2);
     }
+
+    // ABSTRACTION
+    // Method to handle collision
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            Player player = other.gameObject.GetComponent<Player>();
+            if (player != null)
+            {
+                Attack(player);                
+            };
+        }
+    }
+
+    // ABSTRACTION
+    // Method to handle destruction of enemy after passing player
+    void DestroyOutOfBound()
+    {
+        // If an object goes past the players view in the game, remove that object
+        if (transform.position.z > topBound)
+        {
+            Destroy(gameObject);
+        }
+        else if (transform.position.z < lowerBound)
+        {
+            Destroy(gameObject);
+        }
+    }
+
 }
